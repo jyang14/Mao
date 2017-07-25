@@ -1,0 +1,11 @@
+
+#cards{
+    overflow-y: hidden;
+    white-space: nowrap;
+	margin-bottom: 10px
+}
+
+#logs{
+	max-height: 200px;
+    overflow: auto;
+}
