@@ -11,8 +11,17 @@ var server = http.createServer(app).listen(process.env.PORT || 333);
 io = io.listen(server);
 /*initializing the websockets communication , server instance has to be sent as the argument */
 
-function shuffle(array) {
-	let counter = array.length;
+var deck = [];
+
+for (x = 0; x < 52; x++) {
+	deck.push(x);
+	deck.push(x);
+}
+
+var POSITION = deck.length - 1;
+
+function shuffleDeck() {
+	let counter = deck.length;
 
 	// While there are elements in the array
 	while (counter > 0) {
@@ -23,22 +32,14 @@ function shuffle(array) {
 		counter--;
 
 		// And swap the last element with it
-		let temp = array[counter];
-		array[counter] = array[index];
-		array[index] = temp;
+		let temp = deck[counter];
+		deck[counter] = deck[index];
+		deck[index] = temp;
 	}
-
-}
-var deck = [];
-
-for (x = 0; x < 52; x++) {
-	deck.push(x);
-	deck.push(x);
+	POSITION = deck.length - 1;
 }
 
-var POSITION = deck.length - 1;
-
-shuffle(deck);
+shuffleDeck();
 
 var players = [];
 
@@ -112,12 +113,23 @@ function scores() {
 	io.sockets.emit('players', scores);
 }
 
+function draw(cards) {
+	cards.push(deck[POSITION]);
+	POSITION--;
+	if (POSITION == 0)
+		shuffleDeck();
+}
+
+var played = [];
+var logs = [];
+var history = [];
+
 io.on("connection", function (socket) {
 	/*Associating the callback function to be executed when client visits the page and
 	websocket connection is made */
 
 	/*sending data to the client , this triggers a message event at the client side */
-	console.log('Socket.io Connection with the client established');
+	console.log('Connection with the client established');
 
 	var player = {
 		connection: socket,
@@ -135,7 +147,7 @@ io.on("connection", function (socket) {
 	});
 
 	socket.on('disconnect', function () {
-		console.log('Got disconnected!');
+		console.log('Client disconnected.');
 
 		if (player.name != null) {
 			var i = players.indexOf(player);
@@ -146,9 +158,10 @@ io.on("connection", function (socket) {
 	});
 
 	socket.on('play', function (data) {
-		var card = player.cards[data]
-			player.cards.splice(data, 1);
-		io.sockets.emit('log', player.name + ": " + cardToString(card));
+		var card = player.cards[data];
+		player.cards.splice(data, 1);
+		io.sockets.emit('played', cardToString(card));
+		io.sockets.emit('log', player.name + " played " + cardToString(card));
 		player.cards.sort((a, b) => a - b);
 		socket.emit('cards', player.cards)
 		scores();
@@ -156,10 +169,7 @@ io.on("connection", function (socket) {
 	});
 
 	socket.on('draw', function (data) {
-		player.cards.push(deck[POSITION]);
-		POSITION--;
-		if (POSITION == 0)
-			POSITION = deck.length - 1;
+		draw(player.cards);
 		io.sockets.emit('log', player.name + ' drew a card.');
 		player.cards.sort((a, b) => a - b);
 		socket.emit('cards', player.cards)
@@ -169,37 +179,37 @@ io.on("connection", function (socket) {
 
 	socket.on("message", function (data) {
 
-		console.log(data);
-
 		switch (data) {
 		case "start":
+			console.log(player.name + " started the game of Mao.");
 			io.sockets.send("start");
 
-			io.sockets.emit('log', cardToString(deck[POSITION]));
+			shuffleDeck();
 
-			POSITION--;
-			if (POSITION == 0)
-				POSITION = deck.length - 1;
+			played = [];
+
+			draw(played);
+
+			io.sockets.emit('played', cardToString(played[0]));
+			io.sockets.emit('log', 'Initial card is ' + cardToString(played[0]));
 
 			players.forEach(function (person) {
 				person.cards = [];
 				for (i = 0; i < 7; i++) {
-					person.cards.push(deck[POSITION]);
-					POSITION--;
-					if (POSITION == 0)
-						POSITION = deck.length - 1;
-
+					draw(person.cards);
 				}
-				 person.cards.sort((a, b) => a - b);
+				person.cards.sort((a, b) => a - b);
 				person.connection.emit('cards', person.cards);
 			});
 			scores();
 
 			break;
 		case "mao":
+			console.log(player.name + " declares Mao.");
 			io.sockets.emit('log', player.name + " declares Mao.");
 			break;
 		default:
+			console.log(player.name + " used command:" + data);
 			io.sockets.send(data);
 
 		}

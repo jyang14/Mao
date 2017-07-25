@@ -1,11 +1,19 @@
-
-#cards{
+#cards {
     overflow-y: hidden;
     white-space: nowrap;
-	margin-bottom: 10px
+    margin-bottom: 10px
 }
-
-#logs{
-	max-height: 200px;
+#logs,
+#played_cards {
+    height: 200px;
     overflow: auto;
+}
+th {
+    text-align: left;
+}
+#history_table {
+    width: 100%;
+}
+#first_col {
+    width: 33%;
 }

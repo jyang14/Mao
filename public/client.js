@@ -2,21 +2,11 @@ var socket = io.connect("/");
 /*Initializing the connection with the server via websockets */
 
 socket.on("players", function (players) {
-	console.log(players);
+	//console.log(players);
 	$('#players').empty();
 	players.forEach(function (player) {
 		$('#players').append('<li>' + player + '</li>');
 	});
-});
-
-socket.on("add_player", function (message) {
-	console.log(message);
-	$('#players').append('<li>' + message + '</li>');
-});
-
-socket.on("delete_player", function (message) {
-	console.log(message);
-	$('#players').find("li:contains(" + message + ")").remove();
 });
 
 function cardToString(card) {
@@ -91,6 +81,13 @@ socket.on("cards", function (cards) {
 	$("input:radio[name=card]:first").attr('checked', true);
 });
 
+socket.on("played", function (message) {
+	$('#played_cards').append(message + '</br>');
+	$("#played_cards").animate({
+        scrollTop: $("#played_cards").prop("scrollHeight")
+    }, 300);
+});
+
 socket.on("message", function (message) {
 
 	switch (message) {
@@ -101,6 +98,7 @@ socket.on("message", function (message) {
 	case "reset":
 		$("#logs").empty();
 		$("#cards").empty();
+		$("#played_cards").empty();
 		$('#starter').css("display", "block");
 		$('#game').css("display", "none");
 		break;
