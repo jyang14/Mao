@@ -1,0 +1,16 @@
+{
+  "name": "mao",
+  "version": "1.2.0",
+  "description": "Web implementation of Mao",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "icefire625",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.3",
+    "http": "0.0.0",
+    "socket.io": "^2.0.3"
+  }
+}
