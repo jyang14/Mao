@@ -120,6 +120,12 @@ function draw(cards) {
 		shuffleDeck();
 }
 
+function log(message) {
+	console.log(message);
+	logs.push(message);
+	io.sockets.emit('log', message);
+}
+
 var played = [];
 var logs = [];
 var history = [];
@@ -160,8 +166,14 @@ io.on("connection", function (socket) {
 	socket.on('play', function (data) {
 		var card = player.cards[data];
 		player.cards.splice(data, 1);
+		history.push({
+			player: player,
+			action: 'play',
+			card: card
+		});
+		played.push(card);
 		io.sockets.emit('played', cardToString(card));
-		io.sockets.emit('log', player.name + " played " + cardToString(card));
+		log(player.name + " played " + cardToString(card));
 		player.cards.sort((a, b) => a - b);
 		socket.emit('cards', player.cards)
 		scores();
@@ -170,7 +182,13 @@ io.on("connection", function (socket) {
 
 	socket.on('draw', function (data) {
 		draw(player.cards);
-		io.sockets.emit('log', player.name + ' drew a card.');
+		log(player.name + ' drew a card.');
+
+		history.push({
+			player: player,
+			action: 'draw',
+			card: player.cards[player.cards.length - 1]
+		});
 		player.cards.sort((a, b) => a - b);
 		socket.emit('cards', player.cards)
 		scores();
@@ -187,11 +205,13 @@ io.on("connection", function (socket) {
 			shuffleDeck();
 
 			played = [];
+			logs = [];
+			history = [];
 
 			draw(played);
 
 			io.sockets.emit('played', cardToString(played[0]));
-			io.sockets.emit('log', 'Initial card is ' + cardToString(played[0]));
+			log('Initial card is ' + cardToString(played[0]));
 
 			players.forEach(function (person) {
 				person.cards = [];
@@ -205,11 +225,48 @@ io.on("connection", function (socket) {
 
 			break;
 		case "mao":
-			console.log(player.name + " declares Mao.");
-			io.sockets.emit('log', player.name + " declares Mao.");
+			log(player.name + " declares Mao.");
+			break;
+		case "shuffle":
+			log(player.name + " shuffled the deck (irreversible).");
+			shuffleDeck();
+			break;
+		case "undo":
+			log(player.name + " attempted to undo the last move.");
+			if (history.length < 1) {
+				log(player.name + ", why are you trying to undo when there are no turns to undo?");
+				break;
+			}
+			var last = history.pop();
+			if (last.player == player) {
+				if (last.action == "draw") {
+					player.cards.splice(player.cards.indexOf(last.card), 1);
+					POSITION++;
+					log("Undo success. Card is returned to the top of the pile unless the deck has been shuffled after the card was drawn.");
+					player.cards.sort((a, b) => a - b);
+					socket.emit('cards', player.cards)
+					scores();
+				} else if (last.action == "play") {
+					var card = played.pop();
+					if (card != last.card) {
+						log("Undo unsuccessful. Unrecoverable error. Contact creator.");
+						played.push(card);
+						break;
+					}
+					log("Undo success. Card is returned to hand.");
+					io.sockets.emit('remove_from_played', card);
+					player.cards.push(card);
+					player.cards.sort((a, b) => a - b);
+					socket.emit('cards', player.cards)
+					scores();
+				}
+			} else {
+				log(player.name + " is unable to undo the last move.");
+				log(last.player.name + " made the last move.");
+			}
 			break;
 		default:
-			console.log(player.name + " used command:" + data);
+			console.log(player.name + " used command: " + data);
 			io.sockets.send(data);
 
 		}

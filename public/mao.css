@@ -6,7 +6,8 @@
 #logs,
 #played_cards {
     height: 200px;
-    overflow: auto;
+	overflow-y: auto;
+    white-space: pre-wrap;
 }
 th {
     text-align: left;

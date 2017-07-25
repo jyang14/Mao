@@ -72,7 +72,7 @@ function cardToString(card) {
 }
 
 socket.on("cards", function (cards) {
-	console.log(cards);
+	//console.log(cards);
 	$('#cards').empty();
 	for (var x = 0; x < cards.length; x++) {
 		$('#cards').append('<input type="radio" name="card" id="card_' + x +
@@ -81,8 +81,13 @@ socket.on("cards", function (cards) {
 	$("input:radio[name=card]:first").attr('checked', true);
 });
 
+socket.on("remove_from_played", function (card) {
+	//console.log(cards);
+	$("#played_cards div:last").remove();
+});
+
 socket.on("played", function (message) {
-	$('#played_cards').append(message + '</br>');
+	$('#played_cards').append('<div>'+message + '<br /></div>');
 	$("#played_cards").animate({
         scrollTop: $("#played_cards").prop("scrollHeight")
     }, 300);
@@ -150,6 +155,18 @@ $(function () {
 $(function () {
 	$('#draw_one').click(function () {
 		socket.emit('draw', '1');
+	});
+});
+
+$(function () {
+	$('#undo').click(function () {
+		socket.send("undo");
+	});
+});
+
+$(function () {
+	$('#shuffle').click(function () {
+		socket.send("shuffle");
 	});
 });
 
