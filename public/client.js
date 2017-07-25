@@ -116,6 +116,9 @@ socket.on("message", function (message) {
 
 socket.on('log', function (message) {
 	$('#logs').append(message + '</br>');
+	$("#logs").animate({
+        scrollTop: $("#logs").prop("scrollHeight")
+    }, 300);
 });
 
 $(function () {
