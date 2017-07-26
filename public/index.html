@@ -61,7 +61,7 @@
                     </div>
                     <div id="login">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="text" id="name" />
+                            <input class="mdl-textfield__input" type="text" id="name" maxlength="40" />
                             <label class="mdl-textfield__label" for="name">Name...</label>
                         </div>
                         <br />
@@ -97,7 +97,7 @@
                                 <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="play" value="Play card" />
                                 <br />
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="draw_amount_text_field">
-                                    <input class="mdl-textfield__input" type="text" pattern="[0-9]*" id="draw_amount">
+                                    <input class="mdl-textfield__input" type="text" pattern="[0-9]*" id="draw_amount" maxlength="2">
                                     <label class="mdl-textfield__label" for="draw_amount">Number of Cards...</label>
                                     <span class="mdl-textfield__error">Input is not a (valid) number!</span>
                                 </div>

@@ -176,7 +176,7 @@ $('#draw').click(function () {
         //display error
         alert("Improper Input");
     }
-    $("#draw_amount").val();
+    $("#draw_amount").val('');
 });
 
 $('#draw_amount').keypress(function (e) {

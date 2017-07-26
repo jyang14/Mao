@@ -3,22 +3,26 @@
     white-space: nowrap;
     margin-bottom: 10px
 }
+
 #logs,
 #played_cards {
     height: 200px;
-	overflow-y: auto;
+    overflow-y: auto;
     white-space: pre-wrap;
 }
+
 th {
     text-align: left;
 }
+
 #history_table {
     width: 100%;
 }
+
 #first_col {
     width: 33%;
 }
 
-#draw_amount_text_field{
+#draw_amount_text_field {
     width: 175px;
 }
