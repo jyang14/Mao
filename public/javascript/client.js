@@ -2,124 +2,124 @@ var socket = io.connect("/");
 /*Initializing the connection with the server via websockets */
 
 socket.on("players", function (players) {
-	//console.log(players);
-	$('#players').empty();
-	players.forEach(function (player) {
-		$('#players').append('<li>' + player + '</li>');
-	});
+    //console.log(players);
+    $('#players').empty();
+    players.forEach(function (player) {
+        $('#players').append('<li>' + player + '</li>');
+    });
 });
 
 function cardToString(card) {
-	var suit = '';
+    var suit = '';
 
-	switch (Math.trunc(card / 13)) {
-	case 0:
-		suit = '♦️';
-		break;
-	case 1:
-		suit = '♣️';
-		break;
-	case 2:
-		suit = '♥️';
-		break;
-	default:
-		suit = '♠️';
-	}
+    switch (Math.trunc(card / 13)) {
+        case 0:
+            suit = '♦️';
+            break;
+        case 1:
+            suit = '♣️';
+            break;
+        case 2:
+            suit = '♥️';
+            break;
+        default:
+            suit = '♠️';
+    }
 
-	var face = '';
-	switch (card % 13) {
-	case 0:
-		face = 'A';
-		break;
-	case 1:
-		face = '2';
-		break;
-	case 2:
-		face = '3';
-		break;
-	case 3:
-		face = '4';
-		break;
-	case 4:
-		face = '5';
-		break;
-	case 5:
-		face = '6';
-		break;
-	case 6:
-		face = '7';
-		break;
-	case 7:
-		face = '8';
-		break;
-	case 8:
-		face = '9';
-		break;
-	case 9:
-		face = '10';
-		break;
-	case 10:
-		face = 'J';
-		break;
-	case 11:
-		face = 'Q';
-		break;
-	default:
-		face = 'K';
-	}
+    var face = '';
+    switch (card % 13) {
+        case 0:
+            face = 'A';
+            break;
+        case 1:
+            face = '2';
+            break;
+        case 2:
+            face = '3';
+            break;
+        case 3:
+            face = '4';
+            break;
+        case 4:
+            face = '5';
+            break;
+        case 5:
+            face = '6';
+            break;
+        case 6:
+            face = '7';
+            break;
+        case 7:
+            face = '8';
+            break;
+        case 8:
+            face = '9';
+            break;
+        case 9:
+            face = '10';
+            break;
+        case 10:
+            face = 'J';
+            break;
+        case 11:
+            face = 'Q';
+            break;
+        default:
+            face = 'K';
+    }
 
-	return suit + face;
+    return suit + face;
 }
 
 socket.on("cards", function (cards) {
-	//console.log(cards);
-	$('#cards').empty();
-	for (var x = 0; x < cards.length; x++) {
-		$('#cards').append('<input type="radio" name="card" id="card_' + x +
-			'" value="' + x + '"/><label for="card_' + x + '">' + cardToString(cards[x]) + '</label>    ');
-	}
-	$("input:radio[name=card]:first").attr('checked', true);
+    //console.log(cards);
+    $('#cards').empty();
+    for (var x = 0; x < cards.length; x++) {
+        $('#cards').append('<input type="radio" name="card" id="card_' + x +
+            '" value="' + x + '"/><label for="card_' + x + '">' + cardToString(cards[x]) + '</label>    ');
+    }
+    $("input:radio[name=card]:first").attr('checked', true);
 });
 
 socket.on("remove_from_played", function (card) {
-	//console.log(cards);
-	$("#played_cards div:last").remove();
+    //console.log(cards);
+    $("#played_cards div:last").remove();
 });
 
 socket.on("played", function (message) {
-	$('#played_cards').append('<div>'+message + '<br /></div>');
-	$("#played_cards").animate({
+    $('#played_cards').append('<div>' + message + '<br /></div>');
+    $("#played_cards").animate({
         scrollTop: $("#played_cards").prop("scrollHeight")
     }, 300);
 });
 
 socket.on("message", function (message) {
 
-	switch (message) {
-	case "start":
-		$('#starter').css("display", "none");
-		$('#game').css("display", "block");
-		break;
-	case "reset":
-		$("#logs").empty();
-		$("#cards").empty();
-		$("#played_cards").empty();
-		$('#starter').css("display", "block");
-		$('#game').css("display", "none");
-		break;
-	case "point of order":
-		if ($('#hide_when_point_of_order').css('display') == 'none')
-			$('#hide_when_point_of_order').css("display", "block");
-		else
-			$('#hide_when_point_of_order').css("display", "none");
-		break;
+    switch (message) {
+        case "start":
+            $('#starter').css("display", "none");
+            $('#game').css("display", "block");
+            break;
+        case "reset":
+            $("#logs").empty();
+            $("#cards").empty();
+            $("#played_cards").empty();
+            $('#starter').css("display", "block");
+            $('#game').css("display", "none");
+            break;
+        case "point of order":
+            if ($('#hide_when_point_of_order').css('display') === 'none')
+                $('#hide_when_point_of_order').css("display", "block");
+            else
+                $('#hide_when_point_of_order').css("display", "none");
+            break;
 
-	}
+    }
 });
 
 socket.on('log', function (message) {
-	$('#logs').append(message + '</br>');
-	$("#logs").animate({
+    $('#logs').append(message + '</br>');
+    $("#logs").animate({
         scrollTop: $("#logs").prop("scrollHeight")
     }, 300);
 });
@@ -133,9 +133,9 @@ $('#submit_username').click(function () {
 });
 
 $('#name').keypress(function (e) {
-	if (e.which == 13) { //Enter key pressed
-		$('#submit_username').click(); //Trigger search button click event
-	}
+    if (e.which === 13) { //Enter key pressed
+        $('#submit_username').click(); //Trigger search button click event
+    }
 });
 
 $('#starter').click(function () {
@@ -144,10 +144,6 @@ $('#starter').click(function () {
 
 $('#play').click(function () {
     socket.emit('play', $('input[name=card]:checked', '#cards').val());
-});
-
-$('#draw_one').click(function () {
-    socket.emit('draw', '1');
 });
 
 $('#undo').click(function () {
@@ -168,4 +164,23 @@ $('#reset').click(function () {
 
 $('#point_of_order').click(function () {
     socket.send("point of order");
+});
+
+$('#draw').click(function () {
+
+    if (/[0-9]+/.test($("#draw_amount").val())) {
+        //submit
+        socket.emit('draw', $("#draw_amount").val());
+    }
+    else {
+        //display error
+        alert("Improper Input");
+    }
+    $("#draw_amount").val();
+});
+
+$('#draw_amount').keypress(function (e) {
+    if (e.which === 13) { //Enter key pressed
+        $('#draw').click(); //Trigger search button click event
+    }
 });

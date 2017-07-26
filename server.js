@@ -107,7 +107,7 @@ function cardToString(card) {
 
 function scores() {
     var scores = [];
-    players.forEach(function (person) {
+    players.forEach((person) => {
         scores.push(person.name + " - " + person.cards.length);
     });
     io.sockets.emit('players', scores);
@@ -116,7 +116,7 @@ function scores() {
 function draw(cards) {
     cards.push(deck[POSITION]);
     POSITION--;
-    if (POSITION == 0)
+    if (POSITION === 0)
         shuffleDeck();
 }
 
@@ -155,7 +155,7 @@ io.on("connection", function (socket) {
     socket.on('disconnect', function () {
         console.log('Client disconnected.');
 
-        if (player.name != null) {
+        if (player.name !== null) {
             var i = players.indexOf(player);
             players.splice(i, 1);
             scores();
@@ -169,28 +169,33 @@ io.on("connection", function (socket) {
         history.push({
             player: player,
             action: 'play',
-            card: card
+            cards: card
         });
         played.push(card);
         io.sockets.emit('played', cardToString(card));
         log(player.name + " played " + cardToString(card));
         player.cards.sort((a, b) => a - b);
-        socket.emit('cards', player.cards)
+        socket.emit('cards', player.cards);
         scores();
 
     });
 
     socket.on('draw', function (data) {
-        draw(player.cards);
-        log(player.name + ' drew a card.');
+        var temp = [];
+        for (var i = 0; i < parseInt(data); i++)
+            draw(temp);
+        log(player.name + ' drew ' + data + ' card(s).');
 
         history.push({
             player: player,
             action: 'draw',
-            card: player.cards[player.cards.length - 1]
+            cards: temp
         });
+
+        player.cards.push(...temp);
+
         player.cards.sort((a, b) => a - b);
-        socket.emit('cards', player.cards)
+        socket.emit('cards', player.cards);
         scores();
 
     });
@@ -238,18 +243,21 @@ io.on("connection", function (socket) {
                     break;
                 }
                 var last = history.pop();
-                if (last.player == player) {
-                    if (last.action == "draw") {
-                        player.cards.splice(player.cards.indexOf(last.card), 1);
+                if (last.player === player) {
+                    if (last.action === "draw") {
+                        last.cards.forEach((card) => {
+                            player.cards.splice(player.cards.indexOf(card), 1);
+                        });
                         POSITION++;
-                        log("Undo success. Card is returned to the top of the pile unless the deck has been shuffled after the card was drawn.");
+                        log("Undo success. Card(s) is returned to the top of the pile unless the deck has been shuffled after the card was drawn.");
                         player.cards.sort((a, b) => a - b);
-                        socket.emit('cards', player.cards)
+                        socket.emit('cards', player.cards);
                         scores();
-                    } else if (last.action == "play") {
+                    } else if (last.action === "play") {
                         var card = played.pop();
-                        if (card != last.card) {
-                            log("Undo unsuccessful. Unrecoverable error. Contact creator.");
+                        if (card !== last.cards) {
+                            log("Undo unsuccessful. Unrecoverable error. Undo history reset. Contact creator.");
+                            history = [];
                             played.push(card);
                             break;
                         }
@@ -257,7 +265,7 @@ io.on("connection", function (socket) {
                         io.sockets.emit('remove_from_played', card);
                         player.cards.push(card);
                         player.cards.sort((a, b) => a - b);
-                        socket.emit('cards', player.cards)
+                        socket.emit('cards', player.cards);
                         scores();
                     }
                 } else {

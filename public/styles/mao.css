@@ -18,3 +18,7 @@ th {
 #first_col {
     width: 33%;
 }
+
+#draw_amount_text_field{
+    width: 175px;
+}

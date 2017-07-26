@@ -60,7 +60,7 @@
                         <ul id="players"></ul>
                     </div>
                     <div id="login">
-                        <div class="mdl-textfield mdl-js-textfield">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <input class="mdl-textfield__input" type="text" id="name" />
                             <label class="mdl-textfield__label" for="name">Name...</label>
                         </div>
@@ -69,7 +69,7 @@
                     </div>
                     <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="starter" type="button" value="Let the Game of Mao now commence." style="display:none" />
                     <div id="game" style="display:none">
-                        <div id="history" style="white-space:nowrap">
+                        <div id="history">
                             <h3>History</h3>
                             <table id="history_table">
                                 <tr>
@@ -95,7 +95,14 @@
                                 <div id="cards">
                                 </div>
                                 <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="play" value="Play card" />
-                                <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="draw_one" value="Draw 1" />
+                                <br />
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="draw_amount_text_field">
+                                    <input class="mdl-textfield__input" type="text" pattern="[0-9]*" id="draw_amount">
+                                    <label class="mdl-textfield__label" for="draw_amount">Number of Cards...</label>
+                                    <span class="mdl-textfield__error">Input is not a (valid) number!</span>
+                                </div>
+                                <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="draw" value="Draw" />
+                                <br />
                                 <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="undo" value="Undo" />
                                 <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="shuffle" value="Shuffle" />
                                 <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="mao" value="Mao" />
