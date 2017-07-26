@@ -128,7 +128,7 @@ $('#submit_username').click(function () {
     socket.emit('name', $('#name').val());
 
     $('#login').css("display", "none");
-    $('#starter').css("display", "block");;
+    $('#starter').css("display", "block");
 
 });
 
