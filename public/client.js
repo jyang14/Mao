@@ -124,14 +124,12 @@ socket.on('log', function (message) {
     }, 300);
 });
 
-$(function () {
-	$('#submit_username').click(function () {
-		socket.emit('name', $('#name').val());
+$('#submit_username').click(function () {
+    socket.emit('name', $('#name').val());
 
-		$('#login').css("display", "none");
-		$('#starter').css("display", "block"); ;
+    $('#login').css("display", "none");
+    $('#starter').css("display", "block");;
 
-	});
 });
 
 $('#name').keypress(function (e) {
@@ -140,50 +138,34 @@ $('#name').keypress(function (e) {
 	}
 });
 
-$(function () {
-	$('#starter').click(function () {
-		socket.send('start');
-	});
+$('#starter').click(function () {
+    socket.send('start');
 });
 
-$(function () {
-	$('#play').click(function () {
-		socket.emit('play', $('input[name=card]:checked', '#cards').val());
-	});
+$('#play').click(function () {
+    socket.emit('play', $('input[name=card]:checked', '#cards').val());
 });
 
-$(function () {
-	$('#draw_one').click(function () {
-		socket.emit('draw', '1');
-	});
+$('#draw_one').click(function () {
+    socket.emit('draw', '1');
 });
 
-$(function () {
-	$('#undo').click(function () {
-		socket.send("undo");
-	});
+$('#undo').click(function () {
+    socket.send("undo");
 });
 
-$(function () {
-	$('#shuffle').click(function () {
-		socket.send("shuffle");
-	});
+$('#shuffle').click(function () {
+    socket.send("shuffle");
 });
 
-$(function () {
-	$('#mao').click(function () {
-		socket.send("mao");
-	});
+$('#mao').click(function () {
+    socket.send("mao");
 });
 
-$(function () {
-	$('#reset').click(function () {
-		socket.send("reset");
-	});
+$('#reset').click(function () {
+    socket.send("reset");
 });
 
-$(function () {
-	$('#point_of_order').click(function () {
-		socket.send("point of order");
-	});
+$('#point_of_order').click(function () {
+    socket.send("point of order");
 });

@@ -1,6 +1,6 @@
 {
   "name": "mao",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Web implementation of Mao",
   "main": "server.js",
   "scripts": {
@@ -12,5 +12,17 @@
     "express": "^4.15.3",
     "http": "0.0.0",
     "socket.io": "^2.0.3"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jyang14/Mao.git"
+  },
+  "keywords": [
+    "Mao"
+  ],
+  "bugs": {
+    "url": "https://github.com/jyang14/Mao/issues"
+  },
+  "homepage": "https://github.com/jyang14/Mao#readme"
 }
