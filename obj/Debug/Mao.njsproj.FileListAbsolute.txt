@@ -1,0 +1,2 @@
+C:\Users\jinch\Desktop\Mao\obj\Debug\Mao.njsprojResolveAssemblyReference.cache
+C:\Users\jinch\Desktop\Mao\bin\Microsoft.NodejsTools.WebRole.dll
