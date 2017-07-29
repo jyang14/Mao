@@ -169,14 +169,13 @@ $('#point_of_order').click(function () {
 $('#draw').click(function () {
 
     if (/[0-9]+/.test($("#draw_amount").val())) {
-        //submit
         socket.emit('draw', $("#draw_amount").val());
     }
-    else {
-        //display error
+    else if ($("#draw_amount").val() === "") {
+        socket.emit('draw', 1);
+    } else {//display error
         alert("Improper Input");
     }
-    $("#draw_amount").val('');
 });
 
 $('#draw_amount').keypress(function (e) {
