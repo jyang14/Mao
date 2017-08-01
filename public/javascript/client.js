@@ -4,9 +4,13 @@ var socket = io.connect("/");
 socket.on("players", function (players) {
     //console.log(players);
     $('#players').empty();
+    $("#player_list").html('<li class="mdl-menu__item" data-val=""></li>');
+
     players.forEach(function (player) {
-        $('#players').append('<li>' + player + '</li>');
+        $('#players').append('<li>' + player.name + ' - ' + player.cards + '</li>');
+        $('#player_list').append(' <li class="mdl-menu__item" data-val="' + player.id + '">' + player.name + '</li>');
     });
+    getmdlSelect.init(".getmdl-select");
 });
 
 function cardToString(card) {
@@ -81,11 +85,6 @@ socket.on("cards", function (cards) {
     $("input:radio[name=card]:first").attr('checked', true);
 });
 
-socket.on("remove_from_played", function (card) {
-    //console.log(cards);
-    $("#played_cards div:last").remove();
-});
-
 socket.on("played", function (message) {
     $('#played_cards').append('<div>' + message + '<br /></div>');
     $("#played_cards").animate({
@@ -124,6 +123,44 @@ socket.on('log', function (message) {
     }, 300);
 });
 
+socket.on('accussation', function (accusation) {
+    let id = Date.now();
+
+    let accuser = accusation.accuser;
+    let accuserID = accusation.accuserID;
+    let accused = accusation.accused;
+    let reason = accusation.reason;
+    let Reason = reason.charAt(0).toUpperCase() + reason.slice(1);
+    let punishment = accusation.punishment;
+
+
+    $('#accusations').append('<div class="mdl-card mdl-shadow--2dp" id="' + id + '"> <div class="mdl-card__title"> <div class="mdl-card__title-text">' + Reason + '</div></div><div class="mdl-card__supporting-text"> ' + accuser + ' accuses you for ' + reason + '. Penalty: Draw ' + punishment + ' Card(s). </div><div class="mdl-card__actions mdl-card--border"> <input class="mdl-button mdl-js-button mdl-js-ripple-effect" type="button" id="' + id + '_accept" value="Accept"/><input class="mdl-button mdl-js-button mdl-js-ripple-effect" type="button" id="' + id + '_dismiss" value="Dismiss"/><input class="mdl-button mdl-js-button mdl-js-ripple-effect" type="button" id="' + id + '_false" value="False Accusation"/></div></div>');
+
+    componentHandler.upgradeDom();
+
+    $('#' + id + '_accept').click(() => {
+        socket.emit('echo', accused + ' accepts the accusation of ' + reason);
+        socket.emit('draw', punishment);
+        $('#' + id).remove();
+    });
+
+    $('#' + id + '_dismiss').click(() => {
+        socket.emit('echo', accused + ' dismisses the accusation of ' + reason);
+        $('#' + id).remove();
+    });
+
+    $('#' + id + '_false').click(() => {
+        socket.emit('accuse',
+            {
+                accused: accuserID,
+                reason: "the false accusation of " + reason,
+                punishment: punishment
+            });
+        $('#' + id).remove();
+    });
+
+});
+
 $('#submit_username').click(function () {
     socket.emit('name', $('#name').val());
 
@@ -138,34 +175,6 @@ $('#name').keypress(function (e) {
     }
 });
 
-$('#starter').click(function () {
-    socket.send('start');
-});
-
-$('#play').click(function () {
-    socket.emit('play', $('input[name=card]:checked', '#cards').val());
-});
-
-$('#undo').click(function () {
-    socket.send("undo");
-});
-
-$('#shuffle').click(function () {
-    socket.send("shuffle");
-});
-
-$('#mao').click(function () {
-    socket.send("mao");
-});
-
-$('#reset').click(function () {
-    socket.send("reset");
-});
-
-$('#point_of_order').click(function () {
-    socket.send("point of order");
-});
-
 $('#draw').click(function () {
 
     if (/[0-9]+/.test($("#draw_amount").val())) {
@@ -174,7 +183,8 @@ $('#draw').click(function () {
     else if ($("#draw_amount").val() === "") {
         socket.emit('draw', 1);
     } else {//display error
-        alert("Improper Input");
+        alert("Improper input for draw amount.");
+        $("#draw_amount").val('');
     }
 });
 
@@ -183,3 +193,36 @@ $('#draw_amount').keypress(function (e) {
         $('#draw').click(); //Trigger search button click event
     }
 });
+
+$('#submit_accusation').click(function () {
+
+    let player = $("#player_list_selector").attr('data-val');
+    let reason = $('#reason').val();
+    let punishment = $("#punishment_amount").val();
+
+    if (player === '') {
+        alert('Please select someone to accuse');
+        return;
+    }
+
+    if (reason === '') {
+        alert('Please give a reason');
+        return;
+    }
+
+    if (!/[0-9]+/.test(punishment)) {
+        alert("Improper input for draw amount.");
+        $("#punishment_amount").val('');
+        return;
+    } else if (punishment === '') {
+        punishment = 1;
+    }
+
+    socket.emit('accuse',
+        {
+            accused: player,
+            reason: reason,
+            punishment: punishment
+        });
+});
+

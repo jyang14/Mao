@@ -17,10 +17,15 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Content Include="package.json" />
+    <Content Include="public\styles\getmdl-select.min.css" />
     <Content Include="README.md" />
     <Compile Include="libs\cardLib.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="public\javascript\clientHelperLib.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="public\javascript\getmdl-select.min.js" />
     <Compile Include="server.js" />
     <Content Include="public\index.html" />
     <Compile Include="public\javascript\client.js" />
