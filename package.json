@@ -1,6 +1,6 @@
 {
   "name": "mao",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Web implementation of Mao",
   "main": "server.js",
   "scripts": {

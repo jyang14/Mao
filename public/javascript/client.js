@@ -85,7 +85,16 @@ socket.on("cards", function (cards) {
     $("input:radio[name=card]:first").attr('checked', true);
 });
 
-socket.on("played", function (message) {
+socket.on("played", function (cards) {
+    cards.forEach((card) => {
+        $('#played_cards').append('<div>' + cardToString(card) + '<br /></div>');
+    });
+    $("#played_cards").animate({
+        scrollTop: $("#played_cards").prop("scrollHeight")
+    }, 300);
+});
+
+socket.on("play", function (message) {
     $('#played_cards').append('<div>' + message + '<br /></div>');
     $("#played_cards").animate({
         scrollTop: $("#played_cards").prop("scrollHeight")
@@ -95,6 +104,9 @@ socket.on("played", function (message) {
 socket.on("message", function (message) {
 
     switch (message) {
+        case "allow_start":
+            $('#starter').css("display", "block");
+            break;
         case "start":
             $('#starter').css("display", "none");
             $('#game').css("display", "block");
@@ -103,7 +115,6 @@ socket.on("message", function (message) {
             $("#logs").empty();
             $("#cards").empty();
             $("#played_cards").empty();
-            $('#starter').css("display", "block");
             $('#game').css("display", "none");
             break;
         case "point of order":
@@ -116,8 +127,18 @@ socket.on("message", function (message) {
     }
 });
 
-socket.on('log', function (message) {
-    $('#logs').append(message + '</br>');
+socket.on('logs', function (logs) {
+    logs.forEach((log) => {
+        $('#logs').append(log + '</br>');
+    });
+    
+    $("#logs").animate({
+        scrollTop: $("#logs").prop("scrollHeight")
+    }, 300);
+});
+
+socket.on('log', function (log) {
+    $('#logs').append(log + '</br>');
     $("#logs").animate({
         scrollTop: $("#logs").prop("scrollHeight")
     }, 300);
@@ -165,7 +186,6 @@ $('#submit_username').click(function () {
     socket.emit('name', $('#name').val());
 
     $('#login').css("display", "none");
-    $('#starter').css("display", "block");
 
 });
 

@@ -94,49 +94,50 @@
                         <br />
                         <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="submit_username" type="button" value="Submit" />
                     </div>
+                    <div id="history">
+                        <h3>Current Game</h3>
+                        <table id="history_table">
+                            <tr>
+                                <th id="first_col">
+                                    <h4>Played Cards</h4>
+                                </th>
+                                <th>
+                                    <h4>Events</h4>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="played_cards"></div>
+                                </td>
+                                <td>
+                                    <div id="logs"></div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
                     <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="starter" type="button" value="Let the Game of Mao now commence." style="display:none" />
                     <div id="game" style="display:none">
-                        <div id="history">
-                            <h3>History</h3>
-                            <table id="history_table">
-                                <tr>
-                                    <th id="first_col">
-                                        <h4>Played Cards</h4>
-                                    </th>
-                                    <th>
-                                        <h4>Events</h4>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div id="played_cards"></div>
-                                    </td>
-                                    <td>
-                                        <div id="logs"></div>
-                                    </td>
-                                </tr>
-                            </table>
-                            <br />
-                            <div id="hide_when_point_of_order">
-                                <h3>Cards</h3>
-                                <div id="cards">
-                                </div>
-                                <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="play" value="Play card" />
-                                <br />
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="draw_amount_text_field">
-                                    <input class="mdl-textfield__input" type="text" pattern="[0-9]*" id="draw_amount" maxlength="2">
-                                    <label class="mdl-textfield__label" for="draw_amount"># of Cards...</label>
-                                    <span class="mdl-textfield__error">Input is not a (valid) number!</span>
-                                </div>
-                                <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="draw" value="Draw" />
-                                <br />
-                                <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="undo" value="Undo" />
-                                <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="shuffle" value="Shuffle" />
-                                <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="mao" value="Mao" />
-                                <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="reset" value="Reset" />
+                        <br />
+                        <div id="hide_when_point_of_order">
+                            <h3>Cards</h3>
+                            <div id="cards">
                             </div>
-                            <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="point_of_order" value="Point of Order" />
+                            <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="play" value="Play card" />
+                            <br />
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="draw_amount_text_field">
+                                <input class="mdl-textfield__input" type="text" pattern="[0-9]*" id="draw_amount" maxlength="2">
+                                <label class="mdl-textfield__label" for="draw_amount"># of Cards...</label>
+                                <span class="mdl-textfield__error">Input is not a (valid) number!</span>
+                            </div>
+                            <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="draw" value="Draw" /> <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="pass" value="Pass" />
+                            <br />
+                            <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="undo" value="Undo" />
+                            <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="shuffle" value="Shuffle" />
+                            <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="mao" value="Mao" />
+                            <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="reset" value="Reset" />
                         </div>
+                        <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" id="point_of_order" value="Point of Order" />
                         <br />
                         <div class="mdl-card mdl-shadow--2dp" id="accuse_block">
                             <div class="mdl-card__title">
