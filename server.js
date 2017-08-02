@@ -30,6 +30,11 @@ var sendAllPlayers = (message) => {
 
 var started = false;
 
+function consoleLog(message, ip){
+	console.log(ip+" : "+message);
+}
+
+
 function scores() {
     var scores = [];
     players.forEach((person, index) => {
@@ -60,9 +65,11 @@ var history = [];
 io.on("connection", function (socket) {
 	/*Associating the callback function to be executed when client visits the page and
 	websocket connection is made */
+	
+	var ip = socket.handshake.headers['x-forwarded-for'] || socket.request.connection.remoteAddress;
 
     /*sending data to the client , this triggers a message event at the client side */
-    console.log('Connection with the client established');
+    consoleLog('Connection with the client established', ip);
 
     socket.emit('logs', logs);
     socket.emit('played', played);
@@ -78,7 +85,7 @@ io.on("connection", function (socket) {
 
     socket.on('name', function (data) {
         player.name = data;
-        console.log(data);
+        consoleLog(data, ip);
         players.push(player);
         scores();
         if (!started)
@@ -86,7 +93,7 @@ io.on("connection", function (socket) {
     });
 
     socket.on('disconnect', function () {
-        console.log('Client disconnected.');
+        consoleLog('Client disconnected.', ip);
 
         if (player.name !== null) {
             var i = players.indexOf(player);
@@ -190,7 +197,7 @@ io.on("connection", function (socket) {
                 scores();
             }
         } else {
-            log(player.name + " tried to undo" + last.player.name + "'s last move.");
+            log(player.name + " tried to undo " + last.player.name + "'s last move.");
         }
     };
 
