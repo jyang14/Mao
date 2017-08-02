@@ -155,7 +155,7 @@ socket.on('accussation', function (accusation) {
     let punishment = accusation.punishment;
 
 
-    $('#accusations').append('<div class="mdl-card mdl-shadow--2dp" id="' + id + '"> <div class="mdl-card__title"> <div class="mdl-card__title-text">' + Reason + '</div></div><div class="mdl-card__supporting-text"> ' + accuser + ' accuses you for ' + reason + '. Penalty: Draw ' + punishment + ' Card(s). </div><div class="mdl-card__actions mdl-card--border"> <input class="mdl-button mdl-js-button mdl-js-ripple-effect" type="button" id="' + id + '_accept" value="Accept"/><input class="mdl-button mdl-js-button mdl-js-ripple-effect" type="button" id="' + id + '_dismiss" value="Dismiss"/><input class="mdl-button mdl-js-button mdl-js-ripple-effect" type="button" id="' + id + '_false" value="False Accusation"/></div></div>');
+    $('#accusations').append('<div id="'+id+'"><div class="mdl-card mdl-shadow--2dp"> <div class="mdl-card__title"> <div class="mdl-card__title-text">' + Reason + '</div></div><div class="mdl-card__supporting-text"> ' + accuser + ' accuses you for ' + reason + '. Penalty: Draw ' + punishment + ' Card(s). </div><div class="mdl-card__actions mdl-card--border"> <input class="mdl-button mdl-js-button mdl-js-ripple-effect" type="button" id="' + id + '_accept" value="Accept"/><input class="mdl-button mdl-js-button mdl-js-ripple-effect" type="button" id="' + id + '_dismiss" value="Dismiss"/><input class="mdl-button mdl-js-button mdl-js-ripple-effect" type="button" id="' + id + '_false" value="False Accusation"/></div></div><br /></div>');
 
     componentHandler.upgradeDom();
 
